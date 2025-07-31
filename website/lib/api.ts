@@ -197,11 +197,20 @@ export async function fetchRentalCar() {
     const res = await axios.get<ApiResponse<RentCar>>(`${BASE_URL}/rent/`);
     const rentCarData = res?.data;
 
-    console.log('Fetched cars:', rentCarData);
     return rentCarData;
   } catch (error) {
     console.error("Error fetching cars:", error);
     return null;
+  }
+}
+
+export async function getCarById(id: string): Promise<RentCar | {}> {
+  try {
+    const res = await axios.get(`${BASE_URL}/rent/${id}`);
+    return res.data || {};
+  } catch (error) {
+    console.error(`Failed to fetch car with ID ${id}:`, error);
+    return {} ;
   }
 }
 
