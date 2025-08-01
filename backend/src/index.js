@@ -22,6 +22,7 @@ const __dirname = path.dirname(__filename);
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3002",
   "http://localhost:5000",
   "http://localhost:5001",
   "http://192.168.0.110:3000",

@@ -19,6 +19,7 @@ import { fetchTourCategories } from "@/lib/api"
 interface TripCategory {
   _id: string; // category name
   count: number;
+  categoryId: string;
 }
 
 const TripCategories = () => {
@@ -138,8 +139,8 @@ const TripCategories = () => {
             const iconString = getIconString(category._id);
             const IconComponent = iconMap[iconString] || Mountain;
             return (
-              <motion.div key={index} variants={itemVariants} className="group">
-                <Link href={`/trips?category=${encodeURIComponent(category._id)}`}>
+              <motion.div key={index} variants={itemVariants} className=  "group">
+                <Link href={`/trips/category?category=${encodeURIComponent(category.categoryId)}&tripType=${category._id}`}>
                   <motion.div
                     whileHover={{
                       scale: 1.05,

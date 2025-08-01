@@ -51,7 +51,7 @@ const CarDetails = () => {
 const BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL
 
 // WhatsApp business number (replace with your actual number)
-  const whatsappNumber = "+923480578106" // Replace with your WhatsApp business number
+  const whatsappNumber = "923555758727" // Replace with your WhatsApp business number
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -61,7 +61,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL
     }))
   }
 
-  const handleBookNow = (e: React.FormEvent) => {
+  const handleBookNow = (e: React.FormEvent) => {   
     e.preventDefault()
 
     // Validate required fields
@@ -71,7 +71,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL
     }
 
     // Create WhatsApp message
-    const message = `🚗 *Car Rental Booking Request*
+    const message = `*Car Rental Booking Request*
 
 *Car Details:*
 • Car: ${car?.carName}
@@ -100,6 +100,7 @@ Please confirm availability and provide final pricing. Thank you!`
 
     // Create WhatsApp URL
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+    // const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`
 
     // Open WhatsApp
     window.open(whatsappUrl, "_blank")
@@ -246,7 +247,7 @@ Please confirm availability and provide final pricing. Thank you!`
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <MapPin className="w-4 h-4" />
                   Pickup Location <span className="text-red-500">*</span>
                 </label>
@@ -265,7 +266,7 @@ Please confirm availability and provide final pricing. Thank you!`
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <MapPin className="w-4 h-4" />
                   Drop-off Location
                 </label>
@@ -286,7 +287,7 @@ Please confirm availability and provide final pricing. Thank you!`
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Pickup Date <span className="text-red-500">*</span>
                 </label>
@@ -300,7 +301,7 @@ Please confirm availability and provide final pricing. Thank you!`
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Drop-off Date
                 </label>
@@ -316,7 +317,7 @@ Please confirm availability and provide final pricing. Thank you!`
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <Clock className="w-4 h-4" />
                   Pickup Time
                 </label>
@@ -329,7 +330,7 @@ Please confirm availability and provide final pricing. Thank you!`
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-2 flex items-center gap-2">
+                <label className="block text-sm font-medium text-slate-600 mb-2 items-center gap-2">
                   <Clock className="w-4 h-4" />
                   Drop-off Time
                 </label>
