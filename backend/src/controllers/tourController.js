@@ -249,7 +249,7 @@ export const getRelatedTours = async (req, res) => {
     // Find up to 3 tours with the same category, excluding the current tour
     const relatedTours = await Tour.find({
       category: tour.category,
-      _id: { $ne: tour._id }
+      // _id: { $ne: tour._id }
     }).limit(3);
     res.json({ success: true, data: relatedTours });
   } catch (error) {
@@ -260,9 +260,10 @@ export const getRelatedTours = async (req, res) => {
 export const getTourCategories = async (req, res) => {
   try {
     const categories = await Tour.aggregate([
-      { $group: { _id: "$category", count: { $sum: 1 } } },
+      { $group: { _id: "$category", count: { $sum: 1 }, categoryId: { $first: "$_id" }  } },
       { $sort: { count: -1 } }
     ]);
+    console.log('categories', categories)
     res.json({ success: true, data: categories });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error fetching categories', error: error.message });

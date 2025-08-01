@@ -71,7 +71,6 @@ export default function GalleryManagement() {
       }
     );
   }, [page, searchTerm]);
-console.log('photos', photos)
   return (
     <div className="container">
       <div className="flex justify-between items-center mb-6">
