@@ -12,6 +12,7 @@ import entryRoutes from './routes/entriesRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 import RentRoutes from './routes/rentRoutes.js';
 import BlogsRoutes from './routes/blogRoutes.js';
+import BookingRoutes from './routes/bookingRoutes.js';
 
 dotenv.config();
 
@@ -109,6 +110,7 @@ app.use('/api/entry', entryRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/rent', RentRoutes);
 app.use('/api/blogs', BlogsRoutes);
+app.use('/api/bookings', BookingRoutes);
 
 // app.use('/api/blogs', blogRoutes);
 // app.use('/api/inquiries', inquiryRoutes);
