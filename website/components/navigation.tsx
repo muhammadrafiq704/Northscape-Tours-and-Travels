@@ -25,8 +25,8 @@ const Navigation = () => {
     // { name: "Destinations", href: "/destinations" },
     { name: "Trips", href: "/trips" },
     { name: "Car Rent", href: "/rent" },
-    // { name: "Blog", href: "/blog" },
     { name: "Gallery", href: "/gallery" },
+    { name: "Blogs", href: "/blog" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
