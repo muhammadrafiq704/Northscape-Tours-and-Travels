@@ -78,7 +78,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               sidebarOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden",
             )}
           >
-            TMP Admin
+            NS-TAT Admin
           </Link>
           <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)} className="flex-shrink-0">
             {sidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
@@ -94,8 +94,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                 href={item.href}
                 className={cn(
                   "flex items-center px-4 py-3 mx-2 rounded-lg transition-colors",
-                  "hover:bg-orange-100 hover:text-orange-600",
-                  pathname === item.href && "bg-orange-100 text-orange-600",
+                  // "hover:bg-orange-100 hover:text-orange-600",
+                  pathname === item.href 
+    ? "bg-primary text-white"   // primary background, white text
+    : "text-primary hover:bg-primary hover:text-white",
                   !sidebarOpen && "justify-center px-2 mx-1",
                 )}
               >
@@ -109,7 +111,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <div className="p-4 border-t">
             <Button
               variant="outline"
-              className={cn("w-full justify-center", !sidebarOpen && "p-2")}
+              className={cn("w-full justify-center", !sidebarOpen && "p-2", "text-primary ", 'border-t border-primary')}
               onClick={handleLogout}
             >
               <LogOut className={cn("h-5 w-5", sidebarOpen && "mr-2")} />
@@ -129,7 +131,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 overflow-y-auto p-6">{children}</main>
         <footer className="sticky bottom-0 z-40 px-6 h-16 bg-white border-t flex items-center justify-around">
-          <p className="text-sm text-gray-600">© {new Date().getFullYear()} Northscape Tours and Travels. All rights reserved.</p>
+          <p className="text-sm text-primary">© {new Date().getFullYear()} Northscape Tours and Travels. All rights reserved.</p>
           <p className="text-xs text-gray-500 mt-1">
             Design and developed by{" "}
             <a href="https://netbots.io" target="_blank" className="text-primary hover:underline">

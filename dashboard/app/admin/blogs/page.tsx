@@ -12,12 +12,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Edit, Trash, Eye } from "lucide-react";
+import { Plus, Edit, Trash, Eye, Badge } from "lucide-react";
 import { getBlogs, deleteBlog } from "@/lib/data-utils";
 import { type Blog } from "@/lib/types";
 import { toast } from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination } from "@/components/ui/pagination";
+import Image from "next/image";
+import { BASE_URL } from "@/Var";
 
 export default function BlogManagement() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -31,11 +33,13 @@ export default function BlogManagement() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { blogs, pages } = await getBlogs({ page, search: searchTerm });
-        setBlogs(blogs);
-        setTotalPages(pages);
-      } catch {
+        const response = await getBlogs({ page, search: searchTerm });
+        setBlogs(response.blogs || []);
+        setTotalPages(response.pages || 1);
+      } catch (error) {
+        console.error("Failed to load blogs:", error);
         toast.error("Failed to load blogs");
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -43,9 +47,10 @@ export default function BlogManagement() {
     fetchData();
   }, [page, searchTerm]);
 
-  const filteredBlogs = blogs.filter((blog) =>
+  const filteredBlogs = (blogs || []).filter((blog) =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this blog post?")) {
@@ -73,6 +78,9 @@ export default function BlogManagement() {
       </div>
 
       <div className="flex justify-between items-center">
+        <p className="text-sm text-muted-foreground">
+          Showing {(blogs || []).length} blog(s) — Page {page} of {totalPages}
+        </p>
         <Input
           placeholder="Search blogs..."
           value={searchTerm}
@@ -84,9 +92,11 @@ export default function BlogManagement() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Cover Image</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Author</TableHead>
             <TableHead>Created At</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -104,29 +114,35 @@ export default function BlogManagement() {
                 className="text-center text-muted-foreground py-6"
               >
                 <div className="flex items-center justify-center mt-4">
-                  <p className="text-center font-medium text-gray-400">No blogs found.</p>
+                  <p className="text-center font-medium text-gray-400">
+                    No blogs found.
+                  </p>
                 </div>
               </TableCell>
             </TableRow>
           ) : (
             filteredBlogs.map((blog) => (
               <TableRow key={blog._id}>
-                <TableCell>{blog.title}</TableCell>
+                <TableCell>
+                  <img src={`${BASE_URL}${blog.coverImage}`} alt={blog.title} width={60} height={40} />
+                </TableCell>
+                <TableCell className="truncate">{blog.title}</TableCell>
                 <TableCell>{blog.author}</TableCell>
                 <TableCell>
-                  {new Date(blog.createdAt).toLocaleDateString()}
+                  {new Date(blog.createdAt).toLocaleDateString()}{" "}
                 </TableCell>
+                <TableCell><span className={`${blog.status==="published" ? "bg-green-500" : "bg-amber-600"} text-white text-xs font-medium p-2 rounded-md`}>{blog.status}</span></TableCell>
                 <TableCell>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
                     className="mr-2"
                     onClick={() => router.push(`/admin/blogs/${blog._id}`)}
                   >
-                    <Eye className="h-4 w-4" />
+                    <Eye className="h-4 w-4" /> 
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
                     className="mr-2"
                     onClick={() => router.push(`/admin/blogs/edit/${blog._id}`)}
@@ -134,7 +150,7 @@ export default function BlogManagement() {
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="destructive"
                     size="icon"
                     onClick={() => handleDelete(blog._id)}
                   >
