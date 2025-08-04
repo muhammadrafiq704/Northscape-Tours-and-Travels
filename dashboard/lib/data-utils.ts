@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { BASE_URL } from "@/Var";
-import { Tour, Blog, GalleryPhoto, Inquiry, RentCar, BlogAPIResponse } from "./types";
+import { Tour, Blog, GalleryPhoto, Inquiry, RentCar, BlogAPIResponse, Booking } from "./types";
 
 const inquiriesData: Inquiry[] = [
   {
@@ -394,5 +394,30 @@ export async function getCarById(id: string): Promise<RentCar | null> {
   }
 }
 
+//BOOKING APIS
+export async function getBookings(query: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) {
+  const params = new URLSearchParams();
+
+  if (query.page) params.append("page", query.page.toString());
+  if (query.limit) params.append("limit", query.limit.toString());
+  if (query.search) params.append("search", query.search);
+
+  const res = await axios.get(`${BASE_URL}/api/bookings?${params.toString()}`);
+  return res.data.data; // Return the data bookings from the response
+}
+
+export async function getBookingById(id: string): Promise<Booking | null> {
+  try {
+    const res = await axios.get(`${BASE_URL}/api/bookings/${id}`);
+    return res.data || null;
+  } catch (error) {
+    console.error(`❌ Failed to fetch car with ID ${id}:`, error);
+    return null;
+  }
+}
 
 
