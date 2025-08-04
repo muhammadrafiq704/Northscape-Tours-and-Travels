@@ -1,3 +1,4 @@
+import { Blog, BlogAPIResponse, SearchBlogsResponse } from "@/data/blogs-types";
 import { GalleryPhoto } from "@/data/gallery-data";
 import { RentCar } from "@/data/rent-data";
 import axios from "axios";
@@ -214,3 +215,103 @@ export async function getCarById(id: string): Promise<RentCar | {}> {
   }
 }
 
+//blogs apis 
+export async function fetchBlogs() {
+  try {
+    const res = await axios.get<ApiResponse<any[]>>(`${BASE_URL}/blogs/`, {
+      withCredentials: true,
+    });
+    if (res.data && res.data.success) {
+      return res.data.data;
+    } else {
+      throw new ApiError(res.data?.message || "Failed to fetch tours");
+    }
+  } catch (error) {
+    const err = error as any;
+    if (isAxiosError(err)) {
+      throw new NetworkError(
+        err.response?.data?.message ||
+          err.message ||
+          "Network error while fetching tours"
+      );
+    }
+    throw new ApiError("Unexpected error while fetching tours");
+  }
+}
+
+// BLOGS
+// Get all blogs with optional filters
+ export interface BlogsResponse {
+  blogs: Blog[];
+  total: number;
+  pages: number;
+  currentPage: number;
+}
+
+interface APIResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export async function getBlogs(query: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}): Promise<BlogsResponse> {
+  const params = new URLSearchParams();
+
+  if (query.page) params.append("page", query.page.toString());
+  if (query.limit) params.append("limit", query.limit.toString());
+  if (query.search) params.append("search", query.search);
+
+  const res = await axios.get<ApiResponse<BlogsResponse>>(`${BASE_URL}/blogs?${params.toString()}`);
+  return res.data.data; // ✅ returns whole object
+}
+
+
+// Get single blog by ID
+export const getBlogById = async (id: string): Promise<Blog> => {
+  try {
+    const res = await axios.get<BlogAPIResponse>(`${BASE_URL}/blogs/${id}`);
+    return res.data.data!; // Return the data property from the response
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to fetch blog");
+  }
+};
+
+// Search blogs
+export const searchBlogs = async (query: string): Promise<Blog[]> => {
+  try {
+    const res = await axios.get<SearchBlogsResponse>(`${BASE_URL}/api/blogs/search`, {
+      params: { search: query },
+    });
+    return res.data.blogs;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to search blogs");
+  }
+};
+
+// Get popular blogs
+export const getPopularBlogs = async (): Promise<Blog[]> => {
+  try {
+    const res = await axios.get<SearchBlogsResponse>(`${BASE_URL}/api/blogs/popular`);
+    return res.data.blogs;
+  } catch (error: any) {
+    throw new Error(
+      error?.response?.data?.message || "Failed to load popular blogs"
+    );
+  }
+};
+
+// Get related blogs (based on category or tags)
+export const getRelatedBlogs = async (blogId: string): Promise<Blog[]> => {
+  try {
+    const res = await axios.get<SearchBlogsResponse>(`${BASE_URL}/api/blogs/related/${blogId}`);
+    return res.data.blogs;
+  } catch (error: any) {
+    throw new Error(
+      error?.response?.data?.message || "Failed to load related blogs"
+    );
+  }
+};

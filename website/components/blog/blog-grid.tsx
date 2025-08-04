@@ -7,9 +7,10 @@ import { useRef } from "react";
 import { User, ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/data/blog-posts";
 import { generateSlug } from "@/lib/slug";
+import { Blog } from "@/data/blogs-types";
 
 interface BlogGridProps {
-  posts?: BlogPost[];
+  posts?: Blog[];
 }
 
 const BlogGrid = ({ posts = [] }: BlogGridProps) => {
@@ -55,6 +56,7 @@ const BlogGrid = ({ posts = [] }: BlogGridProps) => {
       },
     },
   } as const;
+const BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
 
   return (
     <section ref={ref} className="section-padding bg-slate-50">
@@ -68,14 +70,14 @@ const BlogGrid = ({ posts = [] }: BlogGridProps) => {
         >
           {posts.slice(0, visibleCount).map((post, index) => (
             <motion.div
-              key={post.id}
+              key={post._id}
               variants={itemVariants}
               className="group bg-white shadow-md overflow-hidden border border-green-600 hover:shadow-xl transition-all duration-500"
               whileHover="hover"
             >
               <div className="relative h-56 overflow-hidden">
                 <motion.img
-                  src={post.image}
+                  src={`${BASE_URL}${post.coverImage}`}
                   alt={post.title}
                   className="object-cover w-full h-full"
                   variants={imageHoverVariants}
@@ -88,14 +90,14 @@ const BlogGrid = ({ posts = [] }: BlogGridProps) => {
                     {post.category}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {new Date(post.date).toLocaleDateString()}
+                    {new Date(post.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-300">
                   {post.title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {post.excerpt}
+                  {post.summary}
                 </p>
                 <div className="flex items-center text-xs text-gray-500">
                   <User className="w-4 h-4 mr-1" />
@@ -112,7 +114,7 @@ const BlogGrid = ({ posts = [] }: BlogGridProps) => {
                   ))}
                 </div>
                 <Link
-                  href={`/blog/${generateSlug(post.title)}`}
+                  href={`/blog/${(post._id)}`}
                   className="inline-flex items-center space-x-2 text-orange-600 hover:text-green-600 font-semibold transition-colors duration-300 border border-orange-200 rounded-full px-4 py-2 text-sm mt-2"
                 >
                   <span>Read Full Blog</span>

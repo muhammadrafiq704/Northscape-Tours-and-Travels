@@ -1,14 +1,15 @@
 
 import { motion } from "framer-motion"
-import type { BlogPost } from "@/data/blog-posts"
+import { Blog } from "@/data/blogs-types";
 
 interface BlogCategoriesProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
-  posts: BlogPost[];
+  posts: Blog[];
+  isLoading: boolean;
 }
 
-const BlogCategories = ({ activeCategory, onCategoryChange, posts }: BlogCategoriesProps) => {
+const BlogCategories = ({ activeCategory, onCategoryChange, posts, isLoading }: BlogCategoriesProps) => {
   // Build categories dynamically from posts
   const categoryMap: Record<string, number> = {};
   posts.forEach((post) => {
@@ -54,7 +55,9 @@ const BlogCategories = ({ activeCategory, onCategoryChange, posts }: BlogCategor
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-wrap justify-center gap-4">
-          {categories.map((category, index) => (
+          {isLoading ? ( <div className="text-gray-500 text-sm">Loading categories...</div>) :
+          
+          (categories.map((category, index) => (
             <motion.button
               key={category.name}
               variants={itemVariants}
@@ -76,7 +79,7 @@ const BlogCategories = ({ activeCategory, onCategoryChange, posts }: BlogCategor
                 {category.count}
               </span>
             </motion.button>
-          ))}
+          )))}
         </div>
       </div>
     </motion.section>
