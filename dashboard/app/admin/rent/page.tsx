@@ -59,7 +59,6 @@ export default function RentManagement() {
     }
     setDeleteId(null);
   };
-  console.log('cars', cars)
   return (
     <div className="container">
       <div className="flex justify-between items-center mb-6">

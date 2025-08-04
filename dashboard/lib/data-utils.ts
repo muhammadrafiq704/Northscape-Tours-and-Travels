@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { BASE_URL } from "@/Var";
-import { Tour, Blog, GalleryPhoto, Inquiry, RentCar } from "./types";
+import { Tour, Blog, GalleryPhoto, Inquiry, RentCar, BlogAPIResponse } from "./types";
 
 const inquiriesData: Inquiry[] = [
   {
@@ -112,8 +112,7 @@ export async function deleteTour(id: string): Promise<boolean> {
   }
 }
 
-// ---------- Blogs ----------
-
+// BLOGS
 // Get all blogs with optional filters
 export async function getBlogs(query: {
   page?: number;
@@ -126,24 +125,26 @@ export async function getBlogs(query: {
   if (query.limit) params.append("limit", query.limit.toString());
   if (query.search) params.append("search", query.search);
 
-  const res = await axios.get(`${BASE_URL}/blogs?${params.toString()}`);
-  return res.data;
+  const res = await axios.get(`${BASE_URL}/api/blogs?${params.toString()}`);
+  return res.data.data; // Return the data property from the response
 }
 
 // Get single blog by ID
 export const getBlogById = async (id: string): Promise<Blog> => {
   try {
     const res = await axios.get(`${BASE_URL}/api/blogs/${id}`);
-    return res.data;
+    return res.data.data; // Return the data property from the response
   } catch (error: any) {
     throw new Error(error?.response?.data?.message || "Failed to fetch blog");
   }
 };
 
 // Create a new blog
-export const createBlog = async (blogData: Partial<Blog>): Promise<Blog> => {
+export const createBlog = async (
+  formData: FormData
+): Promise<BlogAPIResponse> => {
   try {
-    const res = await axios.post(`${BASE_URL}/api/blogs`, blogData);
+    const res = await axios.post(`${BASE_URL}/api/blogs`, formData);
     return res.data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message || "Failed to create blog");
@@ -153,10 +154,10 @@ export const createBlog = async (blogData: Partial<Blog>): Promise<Blog> => {
 // Update existing blog
 export const updateBlog = async (
   id: string,
-  blogData: Partial<Blog>
-): Promise<Blog> => {
+  formData: FormData
+): Promise<BlogAPIResponse> => {
   try {
-    const res = await axios.put(`${BASE_URL}/api/blogs/${id}`, blogData);
+    const res = await axios.put(`${BASE_URL}/api/blogs/${id}`, formData);
     return res.data;
   } catch (error: any) {
     throw new Error(error?.response?.data?.message || "Failed to update blog");

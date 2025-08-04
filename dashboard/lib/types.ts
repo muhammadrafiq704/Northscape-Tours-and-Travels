@@ -1,3 +1,5 @@
+import { OutputData } from "@editorjs/editorjs";
+
 export interface Tour {
   id: string;
   name: string;
@@ -70,13 +72,23 @@ export interface BlogSection {
   paragraph: string;
 }
 
+
+
+export interface BlogAPIResponse {
+  success: boolean;
+  message?: string;
+  data?: Blog;
+  error?: string;
+  validationErrors?: Record<string, string>;
+}
+
 // Main Blog interface
 export interface Blog {
   _id: string;
   title: string;
-  sections: BlogSection[];
   author: string;
   coverImage: string;
+  content: OutputData;
   category:
     | "Destinations"
     | "Travel Tips"
