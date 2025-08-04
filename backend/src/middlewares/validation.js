@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, check } from "express-validator";
 
 //---------- Tour Validation ----------
 export const tourValidation = [
@@ -50,21 +50,27 @@ export const tourValidation = [
 
 //---------- Blog Validation ----------
 export const blogValidation = [
+  // Title: required, max 100 chars
   body("title")
     .notEmpty()
     .withMessage("Title is required")
     .isLength({ max: 100 })
     .withMessage("Title must be less than 100 characters"),
 
+  // Summary: optional, max 300 chars
   body("summary")
-    .optional()
+    .notEmpty()
+    .withMessage("Summary is required")
     .isLength({ max: 300 })
     .withMessage("Summary must be less than 300 characters"),
 
+  // Author: required
   body("author").notEmpty().withMessage("Author is required"),
 
+  // Category: required
   body("category").notEmpty().withMessage("Category is required"),
 
+  // Tags: optional array of strings
   body("tags")
     .optional()
     .isArray()
@@ -72,33 +78,42 @@ export const blogValidation = [
 
   body("tags.*").optional().isString().withMessage("Each tag must be a string"),
 
-  body("sections")
-    .isArray({ min: 1 })
-    .withMessage("At least one section is required"),
+  // Cover Image: optional string (sent from frontend form submission)
+  check("coverImage").custom((value, { req }) => {
+    if (!req.file) {
+      throw new Error("Cover image is required");
+    }
+    return true;
+  }),
 
-  body("sections.*.heading")
-    .optional()
-    .isString()
-    .withMessage("Section heading must be a string"),
-
-  body("sections.*.paragraph")
+  // Content: Editor.js blocks required
+  body("content")
     .notEmpty()
-    .withMessage("Each section must have a paragraph"),
+    .withMessage("Content is required")
+    .custom((value) => {
+      if (
+        typeof value !== "object" ||
+        !value.blocks ||
+        !Array.isArray(value.blocks) ||
+        value.blocks.length === 0
+      ) {
+        throw new Error(
+          "Content must be a valid Editor.js structure with at least one block"
+        );
+      }
 
-  body("sections.*.hasImage")
-    .optional()
-    .isBoolean()
-    .withMessage("hasImage must be a boolean"),
+      for (const block of value.blocks) {
+        if (
+          !block.type ||
+          typeof block.type !== "string" ||
+          typeof block.data !== "object"
+        ) {
+          throw new Error("Each block must have a valid type and data");
+        }
+      }
 
-  body("sections.*.image")
-    .optional()
-    .isString()
-    .withMessage("Image must be a string path"),
-
-  body("coverImage")
-    .optional()
-    .isString()
-    .withMessage("Cover image must be a string path"),
+      return true;
+    }),
 ];
 
 //---------- Inquiry Validation ----------

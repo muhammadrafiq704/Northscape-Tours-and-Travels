@@ -1,7 +1,10 @@
 import Blog from "../models/blogModel.js";
+import { calculateReadTime } from "../utils/readTimeCalculator.js";
 
 class BlogService {
   async createBlog(blogData) {
+    // Inject calculated readTime
+    blogData.readTime = calculateReadTime(blogData.content);
     return await Blog.create(blogData);
   }
 
@@ -27,7 +30,7 @@ class BlogService {
       filter.$or = [
         { title: { $regex: search, $options: "i" } },
         { summary: { $regex: search, $options: "i" } },
-        { "sections.paragraph": { $regex: search, $options: "i" } },
+        { "content.blocks.data.text": { $regex: search, $options: "i" } },
       ];
     }
 
@@ -54,6 +57,7 @@ class BlogService {
   }
 
   async updateBlog(id, blogData) {
+    blogData.readTime = calculateReadTime(blogData.content);
     const updatedBlog = await Blog.findByIdAndUpdate(id, blogData, {
       new: true,
       runValidators: true,

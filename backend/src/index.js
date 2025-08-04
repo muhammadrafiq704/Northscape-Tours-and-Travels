@@ -11,6 +11,7 @@ import tourRoutes from './routes/tourRoutes.js';
 import entryRoutes from './routes/entriesRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 import RentRoutes from './routes/rentRoutes.js';
+import BlogsRoutes from './routes/blogRoutes.js';
 
 dotenv.config();
 
@@ -107,6 +108,7 @@ app.use('/api/tours', tourRoutes);
 app.use('/api/entry', entryRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/rent', RentRoutes);
+app.use('/api/blogs', BlogsRoutes);
 
 // app.use('/api/blogs', blogRoutes);
 // app.use('/api/inquiries', inquiryRoutes);

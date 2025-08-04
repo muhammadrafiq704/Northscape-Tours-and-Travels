@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 
-const sectionSchema = new mongoose.Schema({
-  subheading: { type: String, required: true },
-  image: { type: String },
-  paragraph: { type: String, required: true },
-});
-
 const blogSchema = new mongoose.Schema(
   {
     title: {
@@ -14,10 +8,12 @@ const blogSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-    sections: {
-      type: [sectionSchema],
-      validate: [(val) => val.length > 0, "At least one section is required."],
+
+    content: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
     },
+
     author: {
       type: String,
       required: true,
