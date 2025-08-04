@@ -23,6 +23,7 @@ import { isAuthenticated, logout } from "@/lib/auth-utils"
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
   { icon: PackageSearch, label: "Tour Packages", href: "/admin/tours" },
+  { icon: PackageSearch, label: "Bookings", href: "/admin/booking" },
   { icon: Camera, label: "Gallery", href: "/admin/gallery" },
   { icon: CarFront , label: "Rent Car", href: "/admin/rent" },
   { icon: FileText, label: "Blogs", href: "/admin/blogs" },

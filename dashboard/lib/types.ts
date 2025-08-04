@@ -165,3 +165,23 @@ export interface RentCar {
   updatedAt?: string;
 }
 
+export interface Booking {
+  data: any;
+  _id?: string; 
+  carModel: string;
+  carName: string;
+  createdAt: string; // ISO date string
+  customerEmail: string;
+  customerName: string;
+  dropoffDate: string; // ISO date string (YYYY-MM-DD)
+  dropoffLocation: string;
+  dropoffTime: string; // HH:mm
+  phoneNumber: string;
+  pickupDate: string; // ISO date string (YYYY-MM-DD)
+  pickupLocation: string;
+  pickupTime: string; // HH:mm
+  pricePerDay: number;
+  specialRequirements: string;
+  status: "Pending" | "Confirmed" | "Cancelled"; 
+}
+
