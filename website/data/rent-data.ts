@@ -11,4 +11,5 @@ export interface RentCar {
   carImage: string;
   createdAt?: string;
   updatedAt?: string;
+  status?:string
 }
