@@ -29,7 +29,6 @@ export const createCar = async (req, res) => {
       driverName,
       carImage: req.body.carImage
     });
-
     await newCar.save();
     res.status(201).json({ message: "Car created successfully", car: newCar });
   } catch (error) { 

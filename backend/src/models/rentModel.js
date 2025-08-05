@@ -9,7 +9,8 @@ const carSchema = new mongoose.Schema(
     fuelType: { type: String, required: true },
     seats: { type: Number, required: true },
     driverName: { type: String, required: true },
-     carImage: [{ type: String, required: true }], 
+    carImage: [{ type: String, required: true }], 
+    status: { type: String, default: "Pending" }, //default pending
   },
   { timestamps: true }
 );
