@@ -88,10 +88,22 @@ const BASE_URL = process.env.NEXT_PUBLIC_IMAGE_BASE_URL;
                 }}
                 transition={{ duration: 0.3 }}
               >
-                <img src={`${BASE_URL}${car.carImage}` || "/placeholder.jpg"} alt={car.carName} className="w-full h-48 object-contain" />
+                <img src={`${BASE_URL}${car.carImage}` || "/placeholder.jpg"} alt={car.carName} className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2 text-slate-800">{car.carName}</h3>
+                  <div className="flex items-center justify-between">
+
                   <p className="text-slate-600 mb-4">{car.carModel} Model</p>
+                  {
+                    car.status === "Confirmed" && (
+                 <span
+                     className="px-2 py-1 rounded-full text-xs border text-white  bg-green-500 "
+                   >
+                       {car.status}
+                    </span>
+                    )
+                  }
+                  </div>
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-black-600">${car.pricePerDay}/day</span>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
