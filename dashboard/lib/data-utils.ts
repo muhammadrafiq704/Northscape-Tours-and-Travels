@@ -419,5 +419,23 @@ export async function getBookingById(id: string): Promise<Booking | null> {
     return null;
   }
 }
+export async function deleteBookingById(id: string) {
+  try {
+    const res = await axios.delete(`${BASE_URL}/api/bookings/${id}`);
+    return res.data || null;
+  } catch (error) {
+    console.error(`❌ Failed to fetch car with ID ${id}:`, error);
+    return null;
+  }
+}
+export async function updatingBookingById(id: string, status: string) {
+  try {
+    const res = await axios.put(`${BASE_URL}/api/bookings/${id}`, {status});
+    return res.data || null;
+  } catch (error) {
+    console.error(`❌ Failed to fetch car with ID ${id}:`, error);
+    return null;
+  }
+}
 
 

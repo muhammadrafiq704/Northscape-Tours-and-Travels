@@ -97,8 +97,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                   "flex items-center px-4 py-3 mx-2 rounded-lg transition-colors",
                   // "hover:bg-orange-100 hover:text-orange-600",
                   pathname === item.href 
-    ? "bg-primary text-white"   // primary background, white text
-    : "text-primary hover:bg-primary hover:text-white",
+                                    ? " text-primary font-semibold"   // primary background, white text
+                                   : "text-black",
                   !sidebarOpen && "justify-center px-2 mx-1",
                 )}
               >
