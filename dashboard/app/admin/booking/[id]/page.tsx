@@ -74,9 +74,9 @@ export default function ViewBlogPage() {
 const book = booking.data
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link href="/admin/bookings">
+      <Link href="/admin/booking">
         <Button variant="outline" className="mb-4">
-          <ChevronLeft className="mr-2 h-4 w-4" /> Back to bookings
+          <ChevronLeft className="mr-2 h-4 w-4" /> Back to Bookings
         </Button>
       </Link>
 
@@ -131,12 +131,12 @@ const book = booking.data
           <Button variant="outline" onClick={() => router.push("/admin/booking")}>
             Back to List
           </Button>
-          <Button
+          {/* <Button
             onClick={() => router.push(`/admin/booking/edit/${book._id}`)}
             className="bg-primary hover:bg-primary/90"
           >
             <Edit className="mr-2 h-4 w-4" /> Edit Booking
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>

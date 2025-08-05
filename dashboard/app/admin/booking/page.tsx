@@ -12,13 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Edit, Trash, Eye, Badge } from "lucide-react";
-import { getBlogs, deleteBlog, getBookings } from "@/lib/data-utils";
+import { Plus,  Trash, Eye} from "lucide-react";
+import { getBookings, deleteBookingById, updatingBookingById } from "@/lib/data-utils";
 import { Booking, type Blog } from "@/lib/types";
 import { toast } from "react-hot-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination } from "@/components/ui/pagination";
-import { BASE_URL } from "@/Var";
 
 export default function BlogManagement() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -46,9 +45,8 @@ export default function BlogManagement() {
     fetchData();
   }, [page, searchTerm]);
 
-  console.log('bookings', bookings)
 
-  const filteredBookings = bookings.filter((book) =>
+  const filteredBookings = bookings?.filter((book) =>
     (book?.carName || "").toLowerCase().includes(searchTerm?.toLowerCase()) ||
     (book?.carModel || "").toLowerCase().includes(searchTerm?.toLowerCase()) || []
   );
@@ -57,15 +55,37 @@ export default function BlogManagement() {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this blog post?")) {
       try {
-        const success = await deleteBlog(id);
+        const success = await deleteBookingById(id);
         if (success) {
           setBookings((prev) => prev.filter((blog) => blog._id !== id));
-          toast.success("Blog deleted successfully");
+          toast.success("Booking deleted successfully");
         } else {
-          toast.error("Failed to delete blog");
+          toast.error("Failed to delete Booking");
         }
       } catch (error) {
-        toast.error("An error occurred while deleting");
+        toast.error("An error occurred while deleting Booking");
+      }
+    }
+  };
+// Confirm booking
+const handleConfirm = async (id: string, status: string) => {
+    if (window.confirm("Are you sure you want to Confrim this Booking?")) {
+      try {
+        console.log('status', status)
+        const updateStatus = status === "Pending" ? "Confirmed" : "Pending";
+        const success = await updatingBookingById(id, updateStatus);
+        console.log('updateStatus', updateStatus)
+        if (success) {
+        const response =   await getBookings({page, search: searchTerm})
+        setBookings(response.bookings || [])
+         setTotalPages(response.pages || 1);
+         
+          toast.success("Booking  successfully");
+        } else {
+          toast.error("Failed to Booking");
+        }
+      } catch (error) {
+        toast.error("An error occurred while Booking");
       }
     }
   };
@@ -101,6 +121,7 @@ export default function BlogManagement() {
             <TableHead>Price Per Day</TableHead>
             <TableHead>Created At</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Confirm</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -127,9 +148,6 @@ export default function BlogManagement() {
           ) : (
             filteredBookings.map((book) => (
               <TableRow key={book._id}>
-                {/* <TableCell>
-                  <img src={`${BASE_URL}${book.coverImage}`} alt={book.title} width={60} height={40} />
-                </TableCell> */}
                 <TableCell className="truncate">{book.carName}</TableCell>
                 <TableCell>{book.carModel}</TableCell>
                 <TableCell>{book.customerName}</TableCell>
@@ -139,6 +157,26 @@ export default function BlogManagement() {
                   {new Date(book.createdAt).toLocaleDateString()}{" "}
                 </TableCell>
                 <TableCell><span    className={`${book.status === "Confirmed" ? "bg-green-500" : book.status ==="Cancelled" ? "bg-red-500" : "bg-amber-600" } px-2 py-1 rounded-md text-sm `}>{book.status}</span></TableCell>
+                 <TableCell className="text-center text-muted-foreground py-6">
+                  {book.status !== "Confirmed" ? (
+                    <Button
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => handleConfirm(`${book._id}`, book.status )}
+                    >
+                      Confirm
+                    </Button>
+                   ):(
+                    <Button
+                      size="sm"
+                      className="bg-purple-800"
+                        onClick={() => handleConfirm(`${book._id}`, book.status )}
+                    >
+                      Cancelled
+                    </Button>
+                  )}
+
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="outline"
@@ -148,14 +186,14 @@ export default function BlogManagement() {
                   >
                     <Eye className="h-4 w-4" /> 
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="outline"
                     size="icon"
                     className="mr-2"
                     onClick={() => router.push(`/admin/booking/edit/${book._id}`)}
                   >
                     <Edit className="h-4 w-4" />
-                  </Button>
+                  </Button> */}
                   <Button
                     variant="destructive"
                     size="icon"
