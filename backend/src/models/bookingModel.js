@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 // --- Booking Schema ---
 const bookingSchema = new mongoose.Schema({
+  carId: String,
   carName: String,
   carModel: String,
   pricePerDay: Number,
